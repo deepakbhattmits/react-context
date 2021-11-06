@@ -1,8 +1,0 @@
-.app{
-  display:grid;
-  grid-template-columns: auto 1fr;
-  grid-gap: 10px;
-}
-.todo-list{
-  list-style-type:number;
-}
