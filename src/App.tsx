@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
+import { FC, useState, useContext } from "react";
 import TodosProvider, { TodosContext } from "./TodosContext";
 
-const Todos = () => {
+const Todos:FC = ():JSX.Element => {
   const [todo, setTodo] = useState<string>("");
   const { todos, addTodo } = useContext(TodosContext);
   const handleSubmit=(e: any) =>
