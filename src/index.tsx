@@ -1,7 +1,7 @@
 import { render } from "react-dom";
 
 import App from "./App";
-import './styles.css'
+import './assets/styles/_index.scss'
 
 const rootElement = document.getElementById("root");
 render(<App />, rootElement);
