@@ -1,9 +1,11 @@
 import  { createContext, useState,useEffect, FC } from "react";
-import {TodosContextState} from "./types";
+import {TodosContextState, Itodos} from "./types";
 
 const contextDefaultValues: TodosContextState = {
   todos: [],
-  addTodo: () => {}
+  addTodo: () => { },
+  removeTodo: () => { },
+  markCompleted:()=>{}
 };
 
 export const TodosContext = createContext<TodosContextState>(
@@ -12,10 +14,22 @@ export const TodosContext = createContext<TodosContextState>(
 
 const TodosProvider: FC=({children}) =>
 {
-  const [todos, setTodos] = useState<string[]>(contextDefaultValues.todos);
-
-  const addTodo=(newTodo: string) => setTodos((todos) => [...todos,newTodo]);
-
+  const [todos,setTodos]=useState<Itodos[]>(contextDefaultValues?.todos);
+  const addTodo=(title: string) =>
+  {
+    console.log('ADD TODO ',todos,title);
+    setTodos((todos: Itodos[]) => [...todos,{id: Math?.random()?.toString(),title,completed:false}]);
+  }
+  const removeTodo=(id: string) =>
+  {
+    const updatedTodos=todos?.filter(el => el?.id!==id);
+    setTodos(updatedTodos);
+  }
+  const markCompleted=(id: string) =>
+  {
+    const updatedTodo=todos?.map(el => el?.id===id? {...el,completed: !el?.completed}:el);
+      setTodos(updatedTodo);
+  }
 
   useEffect(() =>
   {
@@ -36,7 +50,9 @@ const TodosProvider: FC=({children}) =>
     <TodosContext.Provider
       value={{
         todos,
-        addTodo
+        addTodo,
+        removeTodo,
+        markCompleted
       }}
     >
       {children}
