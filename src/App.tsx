@@ -1,5 +1,6 @@
 import {FC,useState,useContext, Fragment} from "react";
 import { Form, Input, message, Button, Space,List, Typography, Divider  } from 'antd';
+import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import TodosProvider, { TodosContext } from "./TodosContext";
 
 const Todos: FC=(): JSX.Element =>
@@ -12,6 +13,9 @@ const Todos: FC=(): JSX.Element =>
   {
     addTodo(todo);
     setTodo('');
+    form.setFieldsValue({
+      todo: '',
+    });
     message.success('Submit success!');
   };
   const onFinishFailed = () => {
@@ -24,7 +28,9 @@ const Todos: FC=(): JSX.Element =>
   };
   return (
     <div className='app'>
- 
+      
+      <div>
+  <Divider orientation="left">Todo Form</Divider>
       <Form
       form={form}
       layout="vertical"
@@ -58,6 +64,7 @@ const Todos: FC=(): JSX.Element =>
         </Space>
       </Form.Item>
     </Form>
+    </div>
       <div>
         <ul className='todo-list'>
       
@@ -70,11 +77,16 @@ const Todos: FC=(): JSX.Element =>
             dataSource={todos}
             renderItem={({id,title, completed}) => (
               <List.Item>
+                <div className='left'>
+                  {completed?<CheckCircleTwoTone twoToneColor='green' />:<CloseCircleTwoTone twoToneColor="#eb2f96" />}
                 <Typography.Text delete={completed}>{title}</Typography.Text>
-
-                <Button type={completed? "default":"primary"} onClick={() => markCompleted(id)}>{completed? 'complete':'incomplete'}</Button>
-
-                <Button type="primary" onClick={() => removeTodo(id)}>Delete</Button>
+                </div>
+                <div className='right'>
+                  <Button type={completed? "default":"primary"} onClick={() => markCompleted(id)}>
+                    {completed? 'complete':'incomplete'}
+                  </Button>
+                  <Button type="primary" onClick={() => removeTodo(id)}>Delete</Button>
+                </div>
               </List.Item>
             )}
           />
