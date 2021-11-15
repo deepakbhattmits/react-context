@@ -2,13 +2,19 @@ import {FC,useState,useContext, Fragment} from "react";
 import { Form, Input, message, Button, Space,List, Typography, Divider  } from 'antd';
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons';
 import TodosProvider, { TodosContext } from "./TodosContext";
-
+import   FileUploader from './components/FileUploader'
 const Todos: FC=(): JSX.Element =>
 {
   
   const [form] = Form.useForm();
   const [todo, setTodo] = useState<string>("");
   const { todos, addTodo, removeTodo,markCompleted } = useContext(TodosContext);
+  const [newUserInfo, setNewUserInfo] = useState<{profileImages:any[]}>({
+    profileImages: []
+  });
+
+  const updateUploadedFiles = (files:any) =>
+    setNewUserInfo({ ...newUserInfo, profileImages: files });
   const handleSubmit=() =>
   {
     addTodo(todo);
@@ -26,6 +32,14 @@ const Todos: FC=(): JSX.Element =>
       todo: 'Todo',
     });
   };
+
+const Header:FC=():JSX.Element=><>
+  <span>Todo</span>
+  <span>{todos?.length} todo{todos?.length>1? 's':''}</span>
+  <span>{todos?.filter(({completed})=>completed)?.length} Completed, </span> 
+  <span>{todos?.filter(({completed})=>!completed)?.length} Incompleted</span> 
+</>
+ 
   return (
     <div className='app'>
       
@@ -71,7 +85,7 @@ const Todos: FC=(): JSX.Element =>
             <Fragment>
           <Divider orientation="left">Todo List</Divider>
           <List
-            header={<div>Todo</div>}
+            header={<Header/>}
             // footer={<div>Footer</div>}
             bordered
             dataSource={todos}
@@ -83,7 +97,7 @@ const Todos: FC=(): JSX.Element =>
                 </div>
                 <div className='right'>
                   <Button type={completed? "default":"primary"} onClick={() => markCompleted(id)}>
-                    {completed? 'complete':'incomplete'}
+                    {completed? 'Completed':'Incomplete'}
                   </Button>
                   <Button type="primary" onClick={() => removeTodo(id)}>Delete</Button>
                 </div>
@@ -94,6 +108,7 @@ const Todos: FC=(): JSX.Element =>
         {/* ))} */}
         </ul>
       </div>
+<FileUploader/>
 
      
     </div>
