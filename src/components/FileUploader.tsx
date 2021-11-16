@@ -1,116 +1,104 @@
-import React, { useState,useRef } from "react";
-import { Upload, Button } from "antd";
-import "antd/dist/antd.css";
+import { useState, useRef } from 'react'
+import { Button } from 'antd'
+import 'antd/dist/antd.css'
 
-const dummyRequest = ({ file, onSuccess }:{file:any, onSuccess?:any}) => {
-  setTimeout(() => {
-    onSuccess("ok");
-  }, 0);
-};
+const FileUploader = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [active, setActive] = useState<boolean>(false)
+  const [selectedFile, setSelectedFile] = useState<any[]>([])
 
-const FileUploader=() =>
-{
-  const fileRef=useRef<HTMLInputElement>(null)
-  const [selectedFile,setSelectedFile]=useState<any>(null);
-   const[ selectedFileList, setSelectedFileList]=useState<any[]>([])
-
-  const onChange=(info: any) =>
-  {   
-    console.log('info : ', info)
-    //  const formData=new FormData();
-
-    //   console.log('info : ',info)
-    //     formData.append('File', info?.file);
-    //   setSelectedFile(formData);
-    //   setSelectedFileList(info?.fileList);
-  };
-  // const onChange=() =>
-  // {
-  //   if(fileRef?.current?.files){
-
-  //     console.log('TEST : ',fileRef?.current?.files[0]);
-  //     // console.log(info?.file)
-  //     const formData=new FormData();
-      
-  //     formData.append('File', fileRef?.current?.files[0]);
-  //     setSelectedFile(formData)
-  //     // setSelectedFileList(info?.fileList)
-  //   }
-  //   };
-
-  const handleDragEnter = (e:any) => {
-    e.preventDefault();
-    console.log("drag enter");
-  };
-
-  const handleDragLeave = (e:any) => {
-    e.preventDefault();
-    console.log("drag leave");
-  };
-
-  const handleDragOver = (e:any) => {
-    e.preventDefault();
-    console.log("drag over");
-  };
-
-  const handleDrop = (e:any)  => {
-    e.preventDefault();
-    console.log("drag drop");
-  };
-
-  const handleClick=async () =>
-  {
-
-fetch(
-  'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  {
-    method: 'POST',
-    body: selectedFile,
+  const onClick = () => {
+    if (fileInputRef?.current) {
+      fileInputRef?.current?.click()
+    }
   }
-).then((response) => response.json())
-.then((result) => {
-  console.log('Success:', result);
-})
-.catch((error) => {
-  console.error('Error:', error);
-});
-
+  const handleChange = () => {
+    if (fileInputRef?.current?.files) {
+      setSelectedFile([fileInputRef?.current?.files[0]])
+    }
   }
-    return (
-      <div className="App">
-        <Upload
-          fileList={selectedFileList}
-          customRequest={dummyRequest}
-          onChange={onChange}
-        >
-          <Button>Choose File</Button>
-        </Upload>
-        {/* <input ref={fileRef} type='file'   onChange={onChange}/> */}
+  const handleDragEnd = (e: any) => {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log('drag end')
+    setActive(false)
+  }
 
+  const handleDragOver = (e: any) => {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log('drag over')
+    setActive(true)
+  }
+  const handleDragLeave = (e: any) => {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log('drag leave')
+    setActive(false)
+  }
+
+  const handleDrop = (e: any) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setSelectedFile([e?.dataTransfer?.files[0]])
+    console.log('drag drop')
+  }
+  const handleRemove = () => {
+    setSelectedFile([])
+  }
+
+  const handleSubmit = async () => {
+    fetch('https://www.mocky.io/v2/5cc8019d300000980a055e76', {
+      method: 'POST',
+      body: JSON.stringify(selectedFile),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('Success:', result)
+      })
+      .catch((error) => {
+        console.error('Error:', error)
+      })
+  }
+  return (
+    <div>
+      {selectedFile?.length ? (
+        selectedFile?.map((el: any, i: number) => (
+          <div key={i} className={`dropzone d-flex ${active ? 'active' : ''}`}>
+            <span>{el.name}</span>
+            <i className="trash alternate icon" onClick={handleRemove} />
+          </div>
+        ))
+      ) : (
         <div
-      className="dropzone"
-      onDrop={e => handleDrop(e)}
-      onDragOver={e => handleDragOver(e)}
-      onDragEnter={e => handleDragEnter(e)}
-      onDragLeave={e => handleDragLeave(e)}
-      onChange={onChange}
-    >
-      <div className="sub-header">Drag your audio file here:</div>
-      <div className="draggable-container">
-        <input
-        ref={fileRef} 
-          type="file"
-          className="file-browser-input"
-          name="file-browser-input"
-          style={{ display: "none" }}
-        />
-      </div> 
+          className={`dropzone ${active ? 'active' : ''}`}
+          draggable="true"
+          onClick={onClick}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+        >
+          <p className="sub-header">Drag and Drop file </p>
+          <p>or</p>
+          <p className="link">Browse files</p>
+          <div className="draggable-container">
+            <input
+              ref={fileInputRef}
+              type="file"
+              className="file-browser-input"
+              name="file-browser-input"
+              onChange={handleChange}
+              hidden
+              accept=".text,.md"
+            />
+          </div>
+        </div>
+      )}
+      <hr />
+      <Button onClick={handleSubmit}>SAVE</Button>
+      <br />
     </div>
-
-        
-        <Button onClick={handleClick}>SAVE</Button>
-        <br />
-      </div>
-  );
+  )
 }
 export default FileUploader
