@@ -20,20 +20,20 @@ const FileUploader = () => {
   const handleDragEnd = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log('drag end')
+    // console.log('drag end')
     setActive(false)
   }
 
   const handleDragOver = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log('drag over')
+    // console.log('drag over')
     setActive(true)
   }
   const handleDragLeave = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
-    console.log('drag leave')
+    // console.log('drag leave')
     setActive(false)
   }
 
@@ -41,7 +41,7 @@ const FileUploader = () => {
     e.stopPropagation()
     e.preventDefault()
     setSelectedFile([e?.dataTransfer?.files[0]])
-    console.log('drag drop')
+    // console.log('drag drop')
   }
   const handleRemove = () => {
     setSelectedFile([])
@@ -54,7 +54,7 @@ const FileUploader = () => {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log('Success:', result)
+        // console.log('Success:', result)
       })
       .catch((error) => {
         console.error('Error:', error)
