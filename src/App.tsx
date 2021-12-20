@@ -1,4 +1,7 @@
-import { FC, useState, useContext, Fragment } from 'react'
+import {FC,useState,useContext,Fragment} from 'react'
+import MaterialTable from 'material-table';
+
+import { TablePagination } from "@material-ui/core";
 import {
   Form,
   Input,
@@ -12,7 +15,25 @@ import {
 import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons'
 import TodosProvider, { TodosContext } from './TodosContext'
 import FileUploader from './components/FileUploader'
-const Todos: FC = (): JSX.Element => {
+const Todos: FC=(): JSX.Element =>
+{
+  
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  //updates pagination, but no re-size
+  const handleChangeRowsPerPage = (event:any) => {
+    //enable to set rows per page to match total count
+    event.target.value === "All"
+      ? setRowsPerPage(data.length)
+      : setRowsPerPage(event.target.value);
+  }; 
+
+  const data = [
+    { name: "Mehmet", surname: "Baran", birthYear: 1987 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Mehmet", surname: "Baran", birthYear: 1987 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Mehmet", surname: "Baran", birthYear: 1987 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }, { name: "Zerya Betül", surname: "Baran", birthYear: 2017 }
+  ];
+  
   const [form] = Form.useForm()
   const [todo, setTodo] = useState<string>('')
   const { todos, addTodo, removeTodo, markCompleted } = useContext(TodosContext)
@@ -126,6 +147,44 @@ const Todos: FC = (): JSX.Element => {
                   </div>
                 </List.Item>
               )}
+            />
+            <MaterialTable
+                 title="Component Override Demo"
+      columns={[
+        { title: "Name", field: "name" },
+        { title: "Surname", field: "surname" },
+        { title: "Birth Year", field: "birthYear" }
+      ]}
+      data={data}
+      //options.pageSize updates, but no re-size
+      options={{ pageSize: rowsPerPage }}
+      // onChangeRowsPerPage={handleChangeRowsPerPage} //TypeError Cannot read property 'value' of undefined
+      components={{
+        Pagination: props => (
+          <TablePagination
+            {...props}
+            rowsPerPageOptions={[5, 10, 20, "All"]}
+            rowsPerPage={rowsPerPage}
+            //updates pagination, but no re-size
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+
+
+            count={data?.length}
+                      // page={
+                      //   firstLoad
+                      //     ? pageNumber
+                      //     : pageNumber - 1
+                      // }
+                      // onChangePage={(e, page) =>
+                      //   handleChangePage(page + 1)
+                      // }
+                      // onChangeRowsPerPage={event => {
+                      //   props.onChangeRowsPerPage(event);
+                      //   handleChangeRowPerPage(event.target.value);
+                      // }}
+          />
+        )
+      }}
             />
           </Fragment>
           {/* ))} */}
