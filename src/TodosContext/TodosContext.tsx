@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, FC } from 'react'
+import { createContext, useState, useEffect, FC, ReactNode } from 'react'
 import { TodosContextState, Itodos } from './types'
 
 const contextDefaultValues: TodosContextState = {
@@ -11,8 +11,11 @@ const contextDefaultValues: TodosContextState = {
 export const TodosContext = createContext<TodosContextState>(
   contextDefaultValues,
 )
+interface IProp {
+  children: ReactNode
+}
 
-const TodosProvider: FC = ({ children }) => {
+const TodosProvider: FC<IProp> = ({ children }) => {
   const [todos, setTodos] = useState<Itodos[]>(contextDefaultValues?.todos)
   const addTodo = (title: string) => {
     console.log('ADD TODO ', todos, title)
