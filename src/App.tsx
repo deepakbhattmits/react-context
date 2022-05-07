@@ -1,7 +1,4 @@
-import { FC, useState, useContext, Fragment } from 'react'
-import MaterialTable from 'material-table'
-
-import { TablePagination } from '@material-ui/core'
+import { FC, useState, useContext, Fragment } from "react";
 import {
   Form,
   Input,
@@ -11,72 +8,75 @@ import {
   List,
   Typography,
   Divider,
-} from 'antd'
-import { CloseCircleTwoTone, CheckCircleTwoTone } from '@ant-design/icons'
-import TodosProvider, { TodosContext } from './TodosContext'
-import FileUploader from './components/FileUploader'
+  Table,
+} from "antd";
+import { CloseCircleTwoTone, CheckCircleTwoTone } from "@ant-design/icons";
+import TodosProvider, { TodosContext } from "./TodosContext";
+import FileUploader from "./components/FileUploader";
 const Todos: FC = (): JSX.Element => {
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   //updates pagination, but no re-size
   const handleChangeRowsPerPage = (event: any) => {
     //enable to set rows per page to match total count
-    event.target.value === 'All'
+    event.target.value === "All"
       ? setRowsPerPage(data.length)
-      : setRowsPerPage(event.target.value)
-  }
+      : setRowsPerPage(event.target.value);
+  };
 
   const data = [
-    { name: 'Mehmet', surname: 'Baran', birthYear: 1987 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Mehmet', surname: 'Baran', birthYear: 1987 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Mehmet', surname: 'Baran', birthYear: 1987 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-    { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017 },
-  ]
+    { name: "Mehmet", surname: "Baran", birthYear: 1987 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Mehmet", surname: "Baran", birthYear: 1987 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Mehmet", surname: "Baran", birthYear: 1987 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+    { name: "Zerya Betül", surname: "Baran", birthYear: 2017 },
+  ];
 
-  const [form] = Form.useForm()
-  const [todo, setTodo] = useState<string>('')
-  const { todos, addTodo, removeTodo, markCompleted } = useContext(TodosContext)
+  const [form] = Form.useForm();
+  const [todo, setTodo] = useState<string>("");
+  const { todos, addTodo, removeTodo, markCompleted } = useContext(
+    TodosContext
+  );
   const [newUserInfo, setNewUserInfo] = useState<{ profileImages: any[] }>({
     profileImages: [],
-  })
+  });
 
   const updateUploadedFiles = (files: any) =>
-    setNewUserInfo({ ...newUserInfo, profileImages: files })
+    setNewUserInfo({ ...newUserInfo, profileImages: files });
   const handleSubmit = () => {
-    addTodo(todo)
-    setTodo('')
+    addTodo(todo);
+    setTodo("");
     form.setFieldsValue({
-      todo: '',
-    })
-    message.success('Submit success!')
-  }
+      todo: "",
+    });
+    message.success("Submit success!");
+  };
   const onFinishFailed = () => {
-    message.error('Submit failed!')
-  }
+    message.error("Submit failed!");
+  };
   const onFill = () => {
     form.setFieldsValue({
-      todo: 'Todo',
-    })
-  }
+      todo: "Todo",
+    });
+  };
 
   const Header: FC = (): JSX.Element => (
     <>
       <span>Todo</span>
       <span>
-        {todos?.length} todo{todos?.length > 1 ? 's' : ''}
+        {todos?.length} todo{todos?.length > 1 ? "s" : ""}
       </span>
       <span>
         {todos?.filter(({ completed }) => completed)?.length} Completed,
@@ -85,7 +85,7 @@ const Todos: FC = (): JSX.Element => {
         {todos?.filter(({ completed }) => !completed)?.length} Incompleted
       </span>
     </>
-  )
+  );
 
   return (
     <div className="app">
@@ -98,17 +98,17 @@ const Todos: FC = (): JSX.Element => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <div style={{ overflow: 'hidden' }}>
+          <div style={{ overflow: "hidden" }}>
             <Form.Item
               name="todo"
               label="Enter todo"
-              rules={[{ required: true }, { type: 'string', min: 6 }]}
+              rules={[{ required: true }, { type: "string", min: 6 }]}
             >
               <Input
                 placeholder="Todo"
                 value={todo}
                 onChange={(e) => {
-                  setTodo(e?.target?.value)
+                  setTodo(e?.target?.value);
                 }}
               />
             </Form.Item>
@@ -148,10 +148,10 @@ const Todos: FC = (): JSX.Element => {
                   </div>
                   <div className="right">
                     <Button
-                      type={completed ? 'default' : 'primary'}
+                      type={completed ? "default" : "primary"}
                       onClick={() => markCompleted(id)}
                     >
-                      {completed ? 'Completed' : 'Incomplete'}
+                      {completed ? "Completed" : "Incomplete"}
                     </Button>
                     <Button type="primary" onClick={() => removeTodo(id)}>
                       Delete
@@ -160,41 +160,46 @@ const Todos: FC = (): JSX.Element => {
                 </List.Item>
               )}
             />
-            <MaterialTable
-              title="Component Override Demo"
+            <Table
+              // title="Component Override Demo"
               columns={[
-                { title: 'Name', field: 'name' },
-                { title: 'Surname', field: 'surname' },
-                { title: 'Birth Year', field: 'birthYear' },
+                { title: "Name", dataIndex: "name" },
+                { title: "Surname", dataIndex: "surname" },
+                { title: "Birth Year", dataIndex: "birthYear" },
               ]}
-              data={data}
-              //options.pageSize updates, but no re-size
-              options={{ pageSize: rowsPerPage }}
-              // onChangeRowsPerPage={handleChangeRowsPerPage} //TypeError Cannot read property 'value' of undefined
-              components={{
-                Pagination: (props) => (
-                  <TablePagination
-                    {...props}
-                    rowsPerPageOptions={[5, 10, 20, 'All']}
-                    rowsPerPage={rowsPerPage}
-                    //updates pagination, but no re-size
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    count={data?.length}
-                    // page={
-                    //   firstLoad
-                    //     ? pageNumber
-                    //     : pageNumber - 1
-                    // }
-                    // onChangePage={(e, page) =>
-                    //   handleChangePage(page + 1)
-                    // }
-                    // onChangeRowsPerPage={event => {
-                    //   props.onChangeRowsPerPage(event);
-                    //   handleChangeRowPerPage(event.target.value);
-                    // }}
-                  />
-                ),
+              dataSource={data}
+              pagination={{
+                defaultPageSize: rowsPerPage,
+                pageSizeOptions: ["5", "10", "15"],
+                showSizeChanger: true,
               }}
+              //options.pageSize updates, but no re-size
+              // options={{ pageSize: rowsPerPage }}
+              // onChangeRowsPerPage={handleChangeRowsPerPage} //TypeError Cannot read property 'value' of undefined
+              // components={{
+              //   Pagination: (props) => (
+              //     <TablePagination
+              //       {...props}
+              //       rowsPerPageOptions={[5, 10, 20, "All"]}
+              //       rowsPerPage={rowsPerPage}
+              //       //updates pagination, but no re-size
+              //       onChangeRowsPerPage={handleChangeRowsPerPage}
+              //       count={data?.length}
+              //       // page={
+              //       //   firstLoad
+              //       //     ? pageNumber
+              //       //     : pageNumber - 1
+              //       // }
+              //       // onChangePage={(e, page) =>
+              //       //   handleChangePage(page + 1)
+              //       // }
+              //       // onChangeRowsPerPage={event => {
+              //       //   props.onChangeRowsPerPage(event);
+              //       //   handleChangeRowPerPage(event.target.value);
+              //       // }}
+              //     />
+              //   ),
+              // }}
             />
           </Fragment>
           {/* ))} */}
@@ -202,11 +207,11 @@ const Todos: FC = (): JSX.Element => {
       </div>
       <FileUploader />
     </div>
-  )
-}
+  );
+};
 
 export default () => (
   <TodosProvider>
     <Todos />
   </TodosProvider>
-)
+);
